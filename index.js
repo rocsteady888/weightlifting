@@ -9,7 +9,7 @@ const session = require('./server/routes/api/session');
 const app = express();
 
 // Body parser middleware
-app.use(bodyParser.urlencoded({ extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // DB Config 
