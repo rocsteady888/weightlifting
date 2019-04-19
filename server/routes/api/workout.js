@@ -14,7 +14,7 @@ const User = require('../../../models/User');
 // @access  Public
 router.get('/test', (req, res) => res.json({ msg: 'Workout Works' }));
 
-// @route   POST api/workout/clockIn
+// @route   POST api/workout/create
 // @desc    Create a new workout and clock in with a description
 // @access  Private
 router.post('/create', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -50,7 +50,6 @@ router.post('/edit/:workoutId', passport.authenticate('jwt', { session: false })
   )
     .then(workout => res.json(workout))
     .catch(err => res.status(404).json(err));
-
 });
 
 // @route   GET api/workout/find/:workoutId
