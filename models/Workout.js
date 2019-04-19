@@ -29,6 +29,10 @@ const WorkoutSchema = new Schema({
   rest: {
     type: Array,
     default: null
+  },
+  created: {
+    type: Date,
+    default: Date.now
   }
 });
 
