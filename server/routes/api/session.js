@@ -19,7 +19,7 @@ router.get('/test', (req, res) => res.json({ msg: 'Workout Works' }));
 // @access  Private
 router.post('/create', passport.authenticate('jwt', { session: false }), (req, res) => {
   const sessionFields = {};
-  if (req.body.clockInDesc) shiftFields.clockInDesc = req.body.clockInDesc;
+  sessionFields.user = req.user.id;
 
   new Session(sessionFields).save()
     .then(session => res.json(session))
