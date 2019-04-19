@@ -32,6 +32,27 @@ router.post('/create', passport.authenticate('jwt', { session: false }), (req, r
     .catch(err => res.status(404).json(err));
 });
 
+// @route   POST api/workout/edit/:workoutId
+// @desc    Edit workout with param workoutId
+// @access  Private
+router.post('/edit/:workoutId', passport.authenticate('jwt', { session: false }), (req, res) => {
+
+  const workoutFields = {};
+  if (req.body.clockInDesc) workoutFields.clockInDesc = req.body.clockInDesc;
+  if (req.body.clockIn) workoutFields.clockIn = req.body.clockIn;
+  if (req.body.clockOutDesc) workoutFields.clockOutDesc = req.body.clockOutDesc;
+  if (req.body.clockOut) workoutFields.clockOut = req.body.clockOut;
+
+  Workout.findOneAndUpdate(
+    { _id: req.params.workoutId },
+    { $set: workoutFields },
+    { new: false, useFindAndModify: false }
+  )
+    .then(workout => res.json(workout))
+    .catch(err => res.status(404).json(err));
+
+});
+
 // @route   GET api/workout/find/:workoutId
 // @desc    Find a workout by workout _id
 // @access  Private
@@ -64,5 +85,20 @@ router.get('/recent', passport.authenticate('jwt', { session: false }), (req, re
     .catch(err => res.status(404).json(err));
 });
 
+// @route   GET api/workout/all
+// @desc    Get all of current user's workouts
+// @access  Private
+router.get('/all', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const errors = {};
+  Workout.find({ user: req.user.id }).sort({ _id: -1 })
+    .then(workouts => {
+      if (!workouts) {
+        errors.workouts = 'There are no workouts for this user';
+        return res.status(400).json(errors);
+      }
+      res.json(workouts);
+    })
+    .catch(err => res.status(404).json(err));
+});
 
 module.exports = router;
