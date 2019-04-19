@@ -75,5 +75,20 @@ router.get('/recent', passport.authenticate('jwt', { session: false }), (req, re
     .catch(err => res.status(404).json(err));
 });
 
+// @route   GET api/session/all
+// @desc    Get all of current user's sessions
+// @access  Private
+router.get('/all', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const errors = {};
+  Session.find({ user: req.user.id }).sort({ _id: -1 })
+    .then(sessions => {
+      if (!sessions) {
+        errors.sessions = 'There are no sessions for this user';
+        return res.status(400).json(errors);
+      }
+      res.json(sessions);
+    })
+    .catch(err => res.status(404).json(err));
+});
 
 module.exports = router;
