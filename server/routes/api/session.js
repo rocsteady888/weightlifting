@@ -19,11 +19,28 @@ router.get('/test', (req, res) => res.json({ msg: 'Workout Works' }));
 // @access  Private
 router.post('/create', passport.authenticate('jwt', { session: false }), (req, res) => {
   const sessionFields = {};
-  sessionFields.user = req.user.id;
+  if (req.body.clockInDesc) shiftFields.clockInDesc = req.body.clockInDesc;
 
   new Session(sessionFields).save()
     .then(session => res.json(session))
     .catch(err => res.status(404).json(err));
+});
+
+// @route   POST api/session/add-workouts/:sessionId
+// @desc    Add workouts to a session with param sessionId
+// @access  Private
+router.post('/add-workouts/:sessionId', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const sessionFields = {};
+  if (req.body.workouts) sessionFields.workouts = req.body.workouts;
+
+  Session.findOneAndUpdate(
+    { _id: req.params.sessionId },
+    { $set: sessionFields },
+    { new: false, useFindAndModify: false }
+  )
+    .then(session => res.json(session))
+    .catch(err => res.status(404).json(err));
+
 });
 
 // @route   GET api/session/find/:sessionId
