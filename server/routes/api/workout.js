@@ -100,4 +100,22 @@ router.get('/all', passport.authenticate('jwt', { session: false }), (req, res) 
     .catch(err => res.status(404).json(err));
 });
 
+// @route   POST api/workout/delete/:workoutId
+// @desc    Delete a workout with param workoutId
+// @access  Private
+router.post('/delete/:workoutId', passport.authenticate('jwt', { session: false }), (req, res) => {
+
+  const errors = {};
+  Workout.findOneAndDelete({ _id: req.params.workoutId })
+    .then(workout => {
+      if (!workout) {
+        errors.noworkout = 'There is no workout for this user';
+        return res.status(400).json(errors);
+      }
+      return res.json()
+    })
+    .catch(err => res.status(404).json(err));
+
+});
+
 module.exports = router;
