@@ -91,4 +91,22 @@ router.get('/all', passport.authenticate('jwt', { session: false }), (req, res) 
     .catch(err => res.status(404).json(err));
 });
 
+// @route   POST api/session/delete/:sessionId
+// @desc    Delete session with param sessionId
+// @access  Private
+router.post('/delete/:sessionId', passport.authenticate('jwt', { session: false }), (req, res) => {
+
+  const errors = {};
+  Session.findOneAndDelete({ _id: req.params.sessionId })
+    .then(session => {
+      if (!session) {
+        errors.nosession = 'There is no session for this user';
+        return res.status(400).json(errors);
+      }
+      return res.json()
+    })
+    .catch(err => res.status(404).json(err));
+
+});
+
 module.exports = router;
