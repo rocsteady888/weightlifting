@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
-import { setCurrentUser, logoutUser } from './actions/authActions';
+import { setCurrentUser, logoutUser } from './store/actions/authActions';
 
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import theme from '../src/style/Theme';
 
-import PrivateRouter from './components/common/PrivateRouter';
+import { Store } from './store/Store';
 
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
@@ -32,25 +32,23 @@ if (localStorage.jwtToken) {
   }
 }
 
-class App extends Component {
-  render() {
-    return (
-      <Router>
-        <div className="App">
-          <MuiThemeProvider theme={theme}>
-            <Route exact path="/" component={Landing} />
-            <div className="container">
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/login" component={Login} />
-            </div>
-            <Switch>
-              <PrivateRouter exact path="/dashboard" component={Dashboard} />
-            </Switch>
-          </MuiThemeProvider>
-        </div>
-      </Router>
-    );
-  }
+function App() {
+  const { state, dispatch } = React.useContext(Store);
+  return (
+    <Router>
+      <div className="App">
+        {console.log(state)}
+        <MuiThemeProvider theme={theme}>
+          <Route exact path="/" component={Landing} />
+          <Route exact path="/dashboard" component={Dashboard} />
+          <div>
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
+          </div>
+        </MuiThemeProvider>
+      </div>
+    </Router>
+  );
 }
 
 export default App;
