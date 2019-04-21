@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+
+import { loginUser } from '../../store/actions/authActions';
+
 import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
@@ -18,6 +21,7 @@ function Login(props) {
   const { classes } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const userData = useState({email: email, password: password})
 
   return (
     <div className={classes.root}>
@@ -40,7 +44,7 @@ function Login(props) {
               name="password"
               required
             />
-            <button type="submit">Submit</button>
+            <button onClick={() => loginUser(userData)}>Submit</button>
           </form>
         </Grid>
       </Grid>
