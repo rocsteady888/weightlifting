@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
@@ -33,7 +33,7 @@ if (localStorage.jwtToken) {
 }
 
 function App() {
-  const { state, dispatch } = React.useContext(Store);
+  const { state, dispatch } = useContext(Store);
   return (
     <Router>
       <div className="App">
@@ -41,10 +41,8 @@ function App() {
         <MuiThemeProvider theme={theme}>
           <Route exact path="/" component={Landing} />
           <Route exact path="/dashboard" component={Dashboard} />
-          <div>
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
-          </div>
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/login" component={Login} />
         </MuiThemeProvider>
       </div>
     </Router>
