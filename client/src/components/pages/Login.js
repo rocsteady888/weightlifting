@@ -21,7 +21,7 @@ function Login(props) {
   const { classes } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const userData = useState({email: email, password: password})
+  const userData = {email: email, password: password}
 
   return (
     <div className={classes.root}>
@@ -44,8 +44,9 @@ function Login(props) {
               name="password"
               required
             />
-            <button onClick={() => loginUser(userData)}>Submit</button>
           </form>
+          <p>{userData.email}</p>
+          <button onClick={() => loginUser(userData)}>Submit</button>
         </Grid>
       </Grid>
     </div>
