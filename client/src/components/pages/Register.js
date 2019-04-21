@@ -16,14 +16,34 @@ const styles = theme => ({
 
 function Register(props) {
   const { classes } = props;
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [dob, setDOB] = useState("");
 
   return (
     <div className={classes.root}>
       <Grid container spacing={24}>
         <Grid item xs={12} sm={6}>
           <form>
+            <input
+              value={firstName}
+              onChange={e => setFirstName(e.target.value)}
+              placeholder="First Name"
+              type="text"
+              name="firstName"
+              required
+            />
+            <input
+              value={lastName}
+              onChange={e => setLastName(e.target.value)}
+              placeholder="Last Name"
+              type="text"
+              name="lastName"
+              required
+            />
             <input
               value={email}
               onChange={e => setEmail(e.target.value)}
@@ -38,6 +58,22 @@ function Register(props) {
               placeholder="Password"
               type="password"
               name="password"
+              required
+            />
+            <input
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              placeholder="Confirm Password"
+              type="password"
+              name="confirmPassword"
+              required
+            />
+            <input
+              value={dob}
+              onChange={e => setDOB(e.target.value)}
+              placeholder="Date of birth"
+              type="date"
+              name="dob"
               required
             />
             <button type="submit">Submit</button>
