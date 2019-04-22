@@ -1,34 +1,20 @@
-import React, { createContext } from 'react'
-import isEmpty from '../validation/isEmpty';
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
+import rootReducer from './reducers';
 
-import { SET_CURRENT_USER, GET_ERRORS, CLEAR_ERRORS } from './actions/types';
+const initialState = {};
 
-export const Store = createContext();
+const middleware = [thunk];
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const enhancer = composeEnhancers(
+  applyMiddleware(...middleware),
+  // other store enhancers if any
+);
 
-const initialState = {
-  isAuthenticated: false,
-  user: {}
-};
+const store = createStore(
+  rootReducer,
+  initialState,
+  enhancer
+);
 
-function reducer(state = initialState, action) {
-  switch (action.type) {
-    case SET_CURRENT_USER:
-      return {
-        ...state,
-        isAuthenticated: !isEmpty(action.payload),
-        user: action.payload
-      };
-    case GET_ERRORS:
-      return action.payload;
-    case CLEAR_ERRORS:
-      return {};
-    default:
-      return state;
-  }
-}
-
-export function StoreProvider(props) {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
-  const value = { state, dispatch };
-  return <Store.Provider value={value}>{props.children}</Store.Provider>;
-}
+export default store;
