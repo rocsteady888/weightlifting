@@ -1,15 +1,16 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { logoutUser } from '../../store/actions/authActions';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 
 const styles = {
-  root: {
+  navbar: {
     flexGrow: 1,
   },
   grow: {
@@ -21,28 +22,54 @@ const styles = {
   },
 };
 
-function ButtonAppBar(props) {
-  const { classes } = props;
-  return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" color="inherit" className={classes.grow}>
-            News
-          </Typography>
-          <Button color="inherit">Login</Button>
-          <Button color="inherit">Register</Button>
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
+class Navbar extends React.Component {
+
+  onLogoutClick = (e) => {
+    e.preventDefault();
+    this.props.logoutUser();
+  }
+
+  render() {
+    const { classes } = this.props;
+    const { isAuthenticated } = this.props.auth;
+
+    const authLinks = (
+      <div>
+        <Button color="inherit" onClick={this.onLogoutClick}>Logout</Button>
+      </div>
+    );
+
+    const guestLinks = (
+      <div>
+        <Button color="inherit" component={Link} to="/login">Login</Button>
+        <Button color="inherit" component={Link} to="/register">Register</Button>
+      </div>
+    );
+
+    return (
+      <div className={classes.navbar}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" color="inherit" className={classes.grow}>
+              Weight Training
+            </Typography>
+            {isAuthenticated ? authLinks : guestLinks}
+          </Toolbar>
+        </AppBar>
+      </div>
+    );
+  }
 }
 
-ButtonAppBar.propTypes = {
+Navbar.propTypes = {
   classes: PropTypes.object.isRequired,
+  logoutUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(ButtonAppBar);
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+
+export default connect(mapStateToProps, { logoutUser })(withStyles(styles)(Navbar));
