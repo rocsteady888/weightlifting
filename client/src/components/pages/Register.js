@@ -1,91 +1,136 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { registerUser } from '../../store/actions/authActions';
 
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing.unit * 2,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-});
+class Register extends Component {
+  constructor() {
+    super();
+    this.state = {
+      firstName: '',
+      lastName: '',
+      timeStampAction: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      errors: {}
+    };
 
-function Register(props) {
-  const { classes } = props;
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [dob, setDOB] = useState("");
+  }
 
-  return (
-    <div className={classes.root}>
-      <Grid container spacing={24}>
-        <Grid item xs={12} sm={6}>
-          <form>
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
+  onChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
+  onSubmit = (e) => {
+    e.preventDefault();
+
+    const newUser = {
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      timeStampAction: this.state.timeStampAction,
+      email: this.state.email,
+      password: this.state.password,
+      confirmPassword: this.state.confirmPassword
+    };
+
+    this.props.registerUser(newUser, this.props.history);
+  }
+
+  render() {
+    const { errors } = this.state;
+
+    return (
+      <div className="register">
+        <h1 className="register-header">Sign Up</h1>
+        <form className="register-container" noValidate onSubmit={this.onSubmit}>
+          <p>
             <input
-              value={firstName}
-              onChange={e => setFirstName(e.target.value)}
               placeholder="First Name"
-              type="text"
               name="firstName"
-              required
+              value={this.state.firstName}
+              onChange={this.onChange}
             />
+          </p>
+          <span>{errors.firstName ? errors.firstName : null}</span>
+          <p>
             <input
-              value={lastName}
-              onChange={e => setLastName(e.target.value)}
               placeholder="Last Name"
-              type="text"
               name="lastName"
-              required
+              value={this.state.lastName}
+              onChange={this.onChange}
             />
+          </p>
+          <span>{errors.lastName ? errors.lastName : null}</span>
+          <p>
             <input
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="Email address"
-              type="email"
+              placeholder="Email"
               name="email"
-              required
+              type="email"
+              value={this.state.email}
+              onChange={this.onChange}
             />
+          </p>
+          <span>{errors.email ? errors.email : null}</span>
+          <p>
             <input
-              value={password}
-              onChange={e => setPassword(e.target.value)}
               placeholder="Password"
-              type="password"
               name="password"
-              required
-            />
-            <input
-              value={confirmPassword}
-              onChange={e => setConfirmPassword(e.target.value)}
-              placeholder="Confirm Password"
               type="password"
-              name="confirmPassword"
-              required
+              value={this.state.password}
+              onChange={this.onChange}
             />
+          </p>
+          <span>{errors.password ? errors.password : null}</span>
+          <p>
             <input
-              value={dob}
-              onChange={e => setDOB(e.target.value)}
-              placeholder="Date of birth"
-              type="date"
-              name="dob"
-              required
+              placeholder="Confirm Password"
+              name="confirmPassword"
+              type="password"
+              value={this.state.confirmPassword}
+              onChange={this.onChange}
+              error={errors.confirmPassword}
             />
-            <button type="submit">Submit</button>
-          </form>
-        </Grid>
-      </Grid>
-    </div>
-  );
+          </p>
+          <span>{errors.confirmPassword ? errors.confirmPassword : null}</span>
+          <span>{errors.emailExists ? errors.emailExists : null}</span>
+          <Button
+            style={{ color: 'white', backgroundColor: '#2196f3' }}
+            fullWidth
+            type="submit"
+            onClick={this.onSubmit}
+          >
+            Register
+          </Button>
+        </form>
+      </div>
+    );
+  }
 }
 
 Register.propTypes = {
-  classes: PropTypes.object.isRequired,
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Register);
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(mapStateToProps, { registerUser })(withRouter(Register));
