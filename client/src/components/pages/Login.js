@@ -1,60 +1,102 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-
+import { connect } from 'react-redux';
+import Button from '@material-ui/core/Button';
 import { loginUser } from '../../store/actions/authActions';
 
-import Grid from '@material-ui/core/Grid';
+class Login extends Component {
+  constructor() {
+    super();
+    this.state = {
+      email: '',
+      password: '',
+      errors: {}
+    };
+  }
 
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing.unit * 2,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-});
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+  }
 
-function Login(props) {
-  const { classes } = props;
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const userData = {email: email, password: password}
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
 
-  return (
-    <div className={classes.root}>
-      <Grid container spacing={24}>
-        <Grid item xs={12} sm={6}>
-          <form>
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
+  onSubmit = (e) => {
+    e.preventDefault();
+
+    const userData = {
+      email: this.state.email,
+      password: this.state.password
+    };
+
+    this.props.loginUser(userData);
+  }
+
+  onChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
+  render() {
+    const { errors } = this.state;
+
+    return (
+      <div className="login">
+        <h2 className="login-header">Log In</h2>
+        <form className="login-container" onSubmit={this.onSubmit}>
+          <p>
             <input
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="Email address"
-              type="email"
+              placeholder="Email Address"
               name="email"
-              required
+              type="email"
+              value={this.state.email}
+              onChange={this.onChange}
             />
+          </p>
+          <span>{errors.email ? errors.email : null}</span>
+          <p>
             <input
-              value={password}
-              onChange={e => setPassword(e.target.value)}
               placeholder="Password"
-              type="password"
               name="password"
-              required
+              type="password"
+              value={this.state.password}
+              onChange={this.onChange}
             />
-          </form>
-          <p>{userData.email}</p>
-          <button onClick={() => loginUser(userData)}>Submit</button>
-        </Grid>
-      </Grid>
-    </div>
-  );
+          </p>
+          <span>{errors.password ? errors.password : null}</span>
+          <p>
+            <Button
+              style={{ color: 'white', backgroundColor: '#2196f3' }}
+              fullWidth
+              type="submit"
+              onClick={this.onSubmit}
+            >
+              Login
+            </Button>
+          </p>
+        </form>
+      </div>
+    );
+  }
 }
 
 Login.propTypes = {
-  classes: PropTypes.object.isRequired,
+  loginUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Login);
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(mapStateToProps, { loginUser })(Login);
