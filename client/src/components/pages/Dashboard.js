@@ -23,23 +23,20 @@ function Dashboard(props) {
     <div className={classes.root}>
     
       <Grid container spacing={24}>
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>Dashboard</Paper>
+        <Grid item xs={12} sm={6}>
+          <Paper className={classes.paper}>New Session</Paper>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper}>xs=12 sm=6</Paper>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper}>xs=12 sm=6</Paper>
+          <Paper className={classes.paper}>Recent Activity</Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}>xs=6 sm=4</Paper>
+          <Paper className={classes.paper}>Progress</Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}>xs=12 sm=4</Paper>
+          <Paper className={classes.paper}>Plans</Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper}>xs=12 sm=4</Paper>
+          <Paper className={classes.paper}>Motivation</Paper>
         </Grid>
       </Grid>
     </div>
