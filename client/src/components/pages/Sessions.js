@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { createNewSession } from '../../store/actions/sessionActions';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   root: {
@@ -15,20 +17,35 @@ const styles = theme => ({
   },
 });
 
-function Sessions(props) {
-  const { classes } = props;
+class Sessions extends React.Component {
 
-  return (
+  handleCreateNewSession = (e) => {
+    e.preventDefault();
+    createNewSession()
+  }
+
+  render() {
+
+    const { classes } = this.props;
+
+    return (
     <div className={classes.root}>
       <Grid container spacing={24}>
         <Grid item xs={12}>
           <Paper className={classes.paper}>Sessions</Paper>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper}>xs=12 sm=6</Paper>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper}>xs=12 sm=6</Paper>
+        <Grid item xs={12}>
+          <Paper className={classes.paper}>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              fullWidth
+              onClick={this.handleCreateNewSession}
+            >
+              New Session
+            </Button>
+          </Paper>
         </Grid>
         <Grid item xs={6} sm={3}>
           <Paper className={classes.paper}>xs=6 sm=3</Paper>
@@ -45,6 +62,7 @@ function Sessions(props) {
       </Grid>
     </div>
   );
+  }
 }
 
 Sessions.propTypes = {
