@@ -10,9 +10,16 @@ const SessionSchema = new Schema({
     type: Array,
     default: null
   },
-  created: {
+  startTime: {
     type: Date,
     default: Date.now
+  },
+  endTime: {
+    type: Date
+  },
+  isComplete: {
+    type: Boolean,
+    default: false
   }
 });
 
