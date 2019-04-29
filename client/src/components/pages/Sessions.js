@@ -21,54 +21,47 @@ const styles = theme => ({
 class Sessions extends React.Component {
 
   render() {
-
-    const { classes } = this.props;
+    const { classes, sessions } = this.props;
 
     return (
-    <div className={classes.root}>
-      <Grid container spacing={24}>
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>Sessions</Paper>
+      <div className={classes.root}>
+        <Grid container spacing={24}>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>Sessions</Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              {
+                sessions.currentSession._id
+                ?
+                sessions.currentSession._id
+                :
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  fullWidth
+                  onClick={this.props.createNewSession}
+                >
+                  New Session
+                </Button>
+              }
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              fullWidth
-              onClick={this.props.createNewSession}
-            >
-              New Session
-            </Button>
-          </Paper>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Paper className={classes.paper}>xs=6 sm=3</Paper>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Paper className={classes.paper}>xs=6 sm=3</Paper>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Paper className={classes.paper}>xs=6 sm=3</Paper>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Paper className={classes.paper}>xs=6 sm=3</Paper>
-        </Grid>
-      </Grid>
-    </div>
-  );
+      </div>
+    );
   }
 }
 
 Sessions.propTypes = {
   classes: PropTypes.object.isRequired,
-  session: PropTypes.object.isRequired,
+  sessions: PropTypes.object.isRequired,
   createNewSession: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  session: state.session
+  sessions: state.sessions
 });
 
 export default connect(mapStateToProps, { createNewSession })(withStyles(styles)(Sessions));
