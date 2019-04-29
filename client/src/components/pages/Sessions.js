@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { createNewSession } from '../../store/actions/sessionActions';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -19,11 +20,6 @@ const styles = theme => ({
 
 class Sessions extends React.Component {
 
-  handleCreateNewSession = (e) => {
-    e.preventDefault();
-    createNewSession()
-  }
-
   render() {
 
     const { classes } = this.props;
@@ -41,7 +37,7 @@ class Sessions extends React.Component {
               color="primary"
               className={classes.button}
               fullWidth
-              onClick={this.handleCreateNewSession}
+              onClick={this.props.createNewSession}
             >
               New Session
             </Button>
@@ -67,6 +63,12 @@ class Sessions extends React.Component {
 
 Sessions.propTypes = {
   classes: PropTypes.object.isRequired,
+  session: PropTypes.object.isRequired,
+  createNewSession: PropTypes.func.isRequired
 };
 
-export default withStyles(styles)(Sessions);
+const mapStateToProps = state => ({
+  session: state.session
+});
+
+export default connect(mapStateToProps, { createNewSession })(withStyles(styles)(Sessions));
