@@ -1,4 +1,7 @@
-import { CREATE_NEW_SESSION } from '../actions/types';
+import { 
+  CREATE_NEW_SESSION, 
+  FIND_OPEN_SESSIONS 
+} from '../actions/types';
 
 const initialState = {
   currentSession: {}
@@ -10,6 +13,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         currentSession: action.payload
+      };
+    case FIND_OPEN_SESSIONS:
+      return {
+        ...state,
+        openSessions: action.payload
       };
     default:
       return state;
