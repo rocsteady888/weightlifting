@@ -13,7 +13,7 @@ import store from './store/store';
 
 import PrivateRoute from './components/common/PrivateRoute';
 
-import SideNav from './components/navigation/SideNav';
+import Appbar from './components/navigation/Appbar';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Landing from './components/pages/Landing';
@@ -48,7 +48,7 @@ function App(props) {
       <Router>
         <div className="App">
           <MuiThemeProvider theme={theme}>
-            <SideNav />
+            <Appbar />
             <Route exact path="/" component={Landing} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
