@@ -91,11 +91,11 @@ router.get('/all', passport.authenticate('jwt', { session: false }), (req, res) 
     .catch(err => res.status(404).json(err));
 });
 
-// @route   GET api/session/findOpen
-// @desc    Find any sessions open session where isComplete is false
+// @route   GET api/session/incomplete
+// @desc    Find any sessions where completed is false
 // @access  Private
-router.get('/findOpen', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Session.find({ isComplete: false })
+router.get('/incomplete', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Session.find({ completed: false })
     .then(sessions => {
       if (!sessions) {
         return null;
