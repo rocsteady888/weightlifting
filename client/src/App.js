@@ -18,7 +18,7 @@ import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Landing from './components/pages/Landing';
 import Dashboard from './components/pages/Dashboard';
-import Sessions from './components/pages/Sessions';
+import Sessions from './components/pages/sessions/Sessions';
 
 // Check for token
 if (localStorage.jwtToken) {
